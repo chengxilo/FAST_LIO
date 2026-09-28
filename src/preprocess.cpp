@@ -1,6 +1,7 @@
 #include "preprocess.h"
 
 #include <pcl/common/common.h>
+#include <cmath>
 
 #define RETURN0 0x00
 #define RETURN0AND1 0x10
@@ -215,7 +216,7 @@ void Preprocess::oust64_handler(const sensor_msgs::msg::PointCloud2::UniquePtr &
     {
       double range = pl_orig.points[i].x * pl_orig.points[i].x + pl_orig.points[i].y * pl_orig.points[i].y +
                      pl_orig.points[i].z * pl_orig.points[i].z;
-      if (range < (blind * blind))
+      if (!std::isfinite(range) || range < (blind * blind))
         continue;
       Eigen::Vector3d pt_vec;
       PointType added_pt;
@@ -272,7 +273,7 @@ void Preprocess::oust64_handler(const sensor_msgs::msg::PointCloud2::UniquePtr &
       double range = pl_orig.points[i].x * pl_orig.points[i].x + pl_orig.points[i].y * pl_orig.points[i].y +
                      pl_orig.points[i].z * pl_orig.points[i].z;
 
-      if (range < (blind * blind))
+      if (!std::isfinite(range) || range < (blind * blind))
         continue;
 
       Eigen::Vector3d pt_vec;
